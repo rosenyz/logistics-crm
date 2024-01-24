@@ -3,6 +3,8 @@ package com.roseny.logisticscrm.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "products")
 @Data
@@ -23,7 +25,7 @@ public class Product {
     @Column(name = "name")
     private Integer quantity;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn
     private Category category;
 }

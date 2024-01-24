@@ -2,8 +2,10 @@ package com.roseny.logisticscrm.controllers;
 
 import com.roseny.logisticscrm.dtos.requests.AddCategoryRequest;
 import com.roseny.logisticscrm.dtos.requests.AddProductRequest;
+import com.roseny.logisticscrm.models.Product;
 import com.roseny.logisticscrm.services.CategoryService;
 import com.roseny.logisticscrm.services.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,13 +22,13 @@ public class AdminController {
     private final CategoryService categoryService;
 
     @PostMapping("/add/category")
-    public ResponseEntity<?> addCategory(@RequestBody AddCategoryRequest categoryRequest) {
+    public ResponseEntity<?> addCategory(@Valid @RequestBody AddCategoryRequest categoryRequest) {
         return categoryService.addCategory(categoryRequest);
     }
 
     @PostMapping("/add/product")
-    public ResponseEntity<?> addProduct(@RequestBody AddProductRequest productRequest) {
-        return ResponseEntity.ok("New product added to category");
+    public ResponseEntity<?> addProduct(@Valid @RequestBody AddProductRequest productRequest) {
+        return productService.addProduct(productRequest);
     }
 
 }

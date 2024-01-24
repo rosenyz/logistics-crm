@@ -1,18 +1,23 @@
 package com.roseny.logisticscrm.controllers;
 
+import com.roseny.logisticscrm.services.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class MainController {
+    private final ProductService productService;
 
     @GetMapping("/catalog")
-    public ResponseEntity<?> getProducts(@RequestParam(required = false) Long category_id) {
-        return ResponseEntity.ok("Some returned");
+    public ResponseEntity<?> getProducts(@RequestParam(name = "category_id", required = false) Long categoryId) {
+        return productService.getProductsByCategory(categoryId);
     }
 
+    @GetMapping("/products/{product_id}")
+    public ResponseEntity<?> getProduct(@PathVariable(name = "product_id") Long productId) {
+        return productService.getProduct(productId);
+    }
 }

@@ -20,7 +20,4 @@ public class Category {
 
     @Column(name = "category_name")
     private String name;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "category")
-    private List<Product> products = new ArrayList<>();
 }
