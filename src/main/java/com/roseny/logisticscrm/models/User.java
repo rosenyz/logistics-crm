@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,11 +29,11 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @Column(name = "balance")
-    private Double balance;
-
     @Column(name = "address", columnDefinition = "text")
     private String address;
+
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "customerId")
+    private List<Order> orders;
 
     @Column(name = "date_of_create")
     private LocalDateTime dateOfCreate;
@@ -45,7 +46,6 @@ public class User {
 
     @PrePersist
     void init() {
-        this.balance = 0.0;
         this.address = "Не указан";
         this.dateOfCreate = LocalDateTime.now();
     }

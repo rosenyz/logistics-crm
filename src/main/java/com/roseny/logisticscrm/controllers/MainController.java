@@ -13,11 +13,18 @@ public class MainController {
 
     @GetMapping("/catalog")
     public ResponseEntity<?> getProducts(@RequestParam(name = "category_id", required = false) Long categoryId) {
+        if (categoryId == null) { return productService.allProducts(); }
+
         return productService.getProductsByCategory(categoryId);
     }
 
     @GetMapping("/products/{product_id}")
     public ResponseEntity<?> getProduct(@PathVariable(name = "product_id") Long productId) {
         return productService.getProduct(productId);
+    }
+
+    @GetMapping("/products")
+        public ResponseEntity<?> allProducts() {
+        return productService.allProducts();
     }
 }

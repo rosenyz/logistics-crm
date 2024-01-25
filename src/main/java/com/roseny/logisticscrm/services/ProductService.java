@@ -6,6 +6,7 @@ import com.roseny.logisticscrm.repositories.CategoryRepository;
 import com.roseny.logisticscrm.repositories.ProductRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,12 +45,33 @@ public class ProductService {
         List<Product> products = productRepository.findProductsByCategoryId(categoryId);
 
         if (products == null || products.isEmpty())
-            return ResponseEntity.ok("Empty category!");
+            return ResponseEntity.ok("Товаров пока нет.");
 
         return ResponseEntity.ok(products);
     }
 
     public ResponseEntity<?> getProduct(Long productId) {
         return ResponseEntity.ok(productRepository.findById(productId));
+    }
+
+    public Product getProductById(Long productId) {
+        return productRepository.findById(productId).orElse(null);
+    }
+
+    public ResponseEntity<?> allProducts() {
+        List<Product> products = productRepository.findAll();
+
+        if(products.isEmpty()) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Товаров пока нет."); }
+
+        return ResponseEntity.ok(products);
+    }
+
+    public ResponseEntity<?> deleteProduct(Long productId) throws Exception{
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new BadRequestException("Product not found"));
+
+        productRepository.delete(product);
+
+        return ResponseEntity.ok("Успешно удалено.");
     }
 }
