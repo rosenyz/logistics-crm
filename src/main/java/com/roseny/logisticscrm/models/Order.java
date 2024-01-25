@@ -1,5 +1,7 @@
 package com.roseny.logisticscrm.models;
 
+import com.roseny.logisticscrm.models.enums.Role;
+import com.roseny.logisticscrm.models.enums.StatusOrder;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -29,6 +31,9 @@ public class Order {
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private List<Product> products;
 
+    @Enumerated(EnumType.STRING)
+    private StatusOrder status;
+
     @Column(name = "products_price")
     private Double productsPrice;
 
@@ -44,5 +49,6 @@ public class Order {
     @PrePersist
     public void init() {
         this.dateOfCreate = LocalDateTime.now();
+        this.status = StatusOrder.STATUS_ORDERED;
     }
 }
