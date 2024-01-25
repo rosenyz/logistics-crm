@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,29 @@ public class UserService implements UserDetailsService {
 
     public User findUserByPrincipal(Principal principal) {
         return userRepository.findByUsername(principal.getName()).orElse( userRepository.findByUsername(principal.getName()).orElse( null ));
+    }
+
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<InfoAboutUserResponse> usersInfo = new ArrayList<>();
+
+        if (users.isEmpty()) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователей на сайте нет."); }
+
+        for (User user : users) {
+            InfoAboutUserResponse userInfo = new InfoAboutUserResponse(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getActive(),
+                    user.getAddress(),
+                    null, // user.getOrders() useless i think
+                    user.getDateOfCreate()
+            );
+
+            usersInfo.add(userInfo);
+        }
+
+        return ResponseEntity.ok(usersInfo);
     }
 
     public ResponseEntity<?> getInfoAboutUserById(Long userId) {

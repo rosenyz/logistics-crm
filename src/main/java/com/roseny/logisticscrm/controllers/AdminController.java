@@ -34,9 +34,4 @@ public class AdminController {
     public ResponseEntity<?> deleteProduct(@PathVariable(name = "product_id") Long productId) throws Exception {
         return productService.deleteProduct(productId);
     }
-
-    @GetMapping("/users/{user_id}")
-    public ResponseEntity<?> getInfoAboutUser(@PathVariable(name = "user_id") Long userId) {
-        return userService.getInfoAboutUserById(userId);
-    }
 }
