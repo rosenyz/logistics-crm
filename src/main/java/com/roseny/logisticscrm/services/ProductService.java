@@ -10,10 +10,7 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +20,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public ResponseEntity<?> addProduct(@Valid @RequestBody AddProductRequest productRequest) {
+    public ResponseEntity<?> addProduct(@Valid AddProductRequest productRequest) {
         Product product = new Product();
 
         product.setCategory(categoryRepository.findById(productRequest.getCategory_id()).orElse(null));

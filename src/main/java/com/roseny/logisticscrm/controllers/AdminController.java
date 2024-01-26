@@ -2,7 +2,6 @@ package com.roseny.logisticscrm.controllers;
 
 import com.roseny.logisticscrm.dtos.requests.AddCategoryRequest;
 import com.roseny.logisticscrm.dtos.requests.AddProductRequest;
-import com.roseny.logisticscrm.models.Product;
 import com.roseny.logisticscrm.services.CategoryService;
 import com.roseny.logisticscrm.services.ProductService;
 import com.roseny.logisticscrm.services.UserService;

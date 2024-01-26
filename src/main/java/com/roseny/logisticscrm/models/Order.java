@@ -1,6 +1,5 @@
 package com.roseny.logisticscrm.models;
 
-import com.roseny.logisticscrm.models.enums.Role;
 import com.roseny.logisticscrm.models.enums.StatusOrder;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -29,7 +28,7 @@ public class Order {
     private String commentary;
 
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    private List<Product> products;
+    private List<Product> products; // may be null, cause customer can order something thats not in catalog ( place url in commentary, for example )
 
     @Enumerated(EnumType.STRING)
     private StatusOrder status;

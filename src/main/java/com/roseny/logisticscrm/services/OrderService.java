@@ -73,4 +73,13 @@ public class OrderService {
 
         return ResponseEntity.ok(order);
     }
+
+    public ResponseEntity<?> getUserOrders(Principal principal) {
+        User user = userService.findUserByPrincipal(principal);
+        List<Order> orders = orderRepository.findOrdersByCustomerId(user.getId());
+
+        if (orders.isEmpty()) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Вы ничего не заказывали."); }
+
+        return ResponseEntity.ok(orders);
+    }
 }
