@@ -21,16 +21,16 @@ public class Order {
     @Column(name = "customer_contact")
     private String customerContact;
 
-    @Column(name = "address_for_delivery")
+    @Column(name = "address_for_delivery", columnDefinition = "text")
     private String addressForDelivery;
 
-    @Column(name = "commentary")
+    @Column(name = "commentary", columnDefinition = "text")
     private String commentary;
 
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private List<Product> products; // may be null, cause customer can order something thats not in catalog ( place url in commentary, for example )
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private StatusOrder status;
 
     @Column(name = "products_price")

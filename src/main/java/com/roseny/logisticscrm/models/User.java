@@ -35,6 +35,9 @@ public class User {
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "customerId")
     private List<Order> orders;
 
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user")
+    private List<Ticket> tickets;
+
     @Column(name = "date_of_create")
     private LocalDateTime dateOfCreate;
 

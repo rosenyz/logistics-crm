@@ -1,7 +1,9 @@
 package com.roseny.logisticscrm.services;
 
 import com.roseny.logisticscrm.dtos.response.InfoAboutUserResponse;
+import com.roseny.logisticscrm.models.Ticket;
 import com.roseny.logisticscrm.models.User;
+import com.roseny.logisticscrm.models.enums.StatusTicket;
 import com.roseny.logisticscrm.repositories.UserRepository;
 import com.roseny.logisticscrm.repositories.impl.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +33,16 @@ public class UserService implements UserDetailsService {
         if (users.isEmpty()) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователей на сайте нет."); }
 
         for (User user : users) {
+
+            List<Ticket> tickets = user.getTickets();
+            Map<UUID, StatusTicket> ticketsMap = new HashMap<UUID, StatusTicket>();
+
+            if (!tickets.isEmpty()) {
+                for (Ticket ticket : tickets) {
+                    ticketsMap.put(ticket.getId(), ticket.getStatus());
+                }
+            }
+
             InfoAboutUserResponse userInfo = new InfoAboutUserResponse(
                     user.getId(),
                     user.getUsername(),
@@ -39,6 +50,7 @@ public class UserService implements UserDetailsService {
                     user.getActive(),
                     user.getAddress(),
                     null, // user.getOrders() useless i think
+                    (tickets.isEmpty()) ? null : ticketsMap,
                     user.getDateOfCreate()
             );
 
@@ -53,6 +65,15 @@ public class UserService implements UserDetailsService {
 
         if (user == null) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Такого пользователя не существует"); }
 
+        List<Ticket> tickets = user.getTickets();
+        Map<UUID, StatusTicket> ticketsMap = new HashMap<UUID, StatusTicket>();
+
+        if (!tickets.isEmpty()) {
+            for (Ticket ticket : tickets) {
+                ticketsMap.put(ticket.getId(), ticket.getStatus());
+            }
+        }
+
         InfoAboutUserResponse userInfo = new InfoAboutUserResponse(
                 user.getId(),
                 user.getUsername(),
@@ -60,6 +81,7 @@ public class UserService implements UserDetailsService {
                 user.getActive(),
                 user.getAddress(),
                 user.getOrders(),
+                (tickets.isEmpty()) ? null : ticketsMap,
                 user.getDateOfCreate()
         );
 

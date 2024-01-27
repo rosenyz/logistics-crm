@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -81,5 +82,21 @@ public class OrderService {
         if (orders.isEmpty()) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Вы ничего не заказывали."); }
 
         return ResponseEntity.ok(orders);
+    }
+
+    public ResponseEntity<?> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+
+        if (orders.isEmpty()) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("В данный момент заказов нет."); }
+
+        return ResponseEntity.ok(orders);
+    }
+
+    public ResponseEntity<?> getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElse(null);
+
+        if (order == null) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Такого заказа не существует."); }
+
+        return ResponseEntity.ok(order);
     }
 }
