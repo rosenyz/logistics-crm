@@ -4,11 +4,11 @@ import com.roseny.logisticscrm.dtos.requests.CreateTicketRequest;
 import com.roseny.logisticscrm.services.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/tickets")
@@ -22,4 +22,8 @@ public class TicketController {
         return ticketService.createTicket(createTicketRequest, principal);
     }
 
+    @GetMapping("/{ticket_uuid}")
+    public ResponseEntity<?> getAllTicketInfo(@PathVariable(name = "ticket_uuid") UUID ticketUUID, Principal principal) {
+        return ticketService.findTicketByUUID(ticketUUID, principal);
+    }
 }

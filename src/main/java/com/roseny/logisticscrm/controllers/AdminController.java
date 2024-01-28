@@ -5,10 +5,14 @@ import com.roseny.logisticscrm.dtos.requests.AddProductRequest;
 import com.roseny.logisticscrm.services.CategoryService;
 import com.roseny.logisticscrm.services.OrderService;
 import com.roseny.logisticscrm.services.ProductService;
+import com.roseny.logisticscrm.services.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/panel")
@@ -17,6 +21,7 @@ public class AdminController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final TicketService ticketService;
     private final OrderService orderService;
 
     @PostMapping("/add/category")
@@ -42,5 +47,22 @@ public class AdminController {
     @GetMapping("/order/{order_id}")
     public ResponseEntity<?> getOrderById(@PathVariable(name = "order_id") Long orderId) {
         return orderService.getOrderById(orderId);
+    }
+
+    @GetMapping("/tickets")
+    public ResponseEntity<?> getAllTicketsByStatus(@RequestParam(name = "status", required = false) String status) {
+        return ticketService.findTicketsByStatus(status);
+    }
+
+    @GetMapping("/ticket/{ticket_uuid}")
+    public ResponseEntity<?> takeTicket(@RequestParam(name = "action", required = false) String action, @PathVariable(name = "ticket_uuid") UUID ticketUUID, Principal principal) {
+        if (action.equals("take"))
+            return ticketService.takeTicket(ticketUUID, principal);
+
+        if (action.equals("close")) {
+            return ticketService.closeTicket(ticketUUID, principal);
+        }
+
+        return ResponseEntity.ok("dsa");
     }
 }

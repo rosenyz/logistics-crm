@@ -31,5 +31,7 @@ public class InfoTicketResponse {
 
     private LocalDateTime dateOfCreate;
 
+    private LocalDateTime dateOfTake;
+
     private LocalDateTime dateOfClose;
 }

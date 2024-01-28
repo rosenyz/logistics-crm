@@ -40,7 +40,10 @@ public class Ticket {
     @Column(name = "date_of_create")
     private LocalDateTime dateOfCreate;
 
-    @Column(name = "dateOfClose")
+    @Column(name = "date_of_take")
+    private LocalDateTime dateOfTake;
+
+    @Column(name = "date_of_close")
     private LocalDateTime dateOfClose;
 
     @PrePersist
@@ -48,6 +51,7 @@ public class Ticket {
         this.status = StatusTicket.STATUS_OPEN;
         this.dateOfCreate = LocalDateTime.now();
         this.staffUser = null;
+        this.dateOfTake = null;
         this.dateOfClose = null;
     }
 }
