@@ -5,6 +5,7 @@ import com.roseny.logisticscrm.dtos.response.InfoTicketResponse;
 import com.roseny.logisticscrm.models.Order;
 import com.roseny.logisticscrm.models.Ticket;
 import com.roseny.logisticscrm.models.User;
+import com.roseny.logisticscrm.models.enums.Role;
 import com.roseny.logisticscrm.models.enums.StatusTicket;
 import com.roseny.logisticscrm.repositories.OrderRepository;
 import com.roseny.logisticscrm.repositories.TicketRepository;
@@ -64,7 +65,7 @@ public class TicketService {
 
         if (ticket == null) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Такого обращения не существует, создайте новый."); }
 
-        if (!ticket.getUser().getId().equals(user.getId())) {
+        if (!(ticket.getUser().getId().equals(user.getId()) || (user.getRoles().contains(Role.ROLE_ADMIN) || user.getRoles().contains(Role.ROLE_SUPPORT)))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Нет доступа.");
         }
 

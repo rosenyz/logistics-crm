@@ -5,6 +5,8 @@ import com.roseny.logisticscrm.dtos.requests.AddProductRequest;
 import com.roseny.logisticscrm.services.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,6 +73,6 @@ public class AdminController {
             return ticketService.closeTicket(ticketUUID, principal);
         }
 
-        return ResponseEntity.ok("dsa");
+        return ticketService.findTicketByUUID(ticketUUID, principal);
     }
 }
