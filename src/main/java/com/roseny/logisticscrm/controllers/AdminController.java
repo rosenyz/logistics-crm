@@ -2,10 +2,7 @@ package com.roseny.logisticscrm.controllers;
 
 import com.roseny.logisticscrm.dtos.requests.AddCategoryRequest;
 import com.roseny.logisticscrm.dtos.requests.AddProductRequest;
-import com.roseny.logisticscrm.services.CategoryService;
-import com.roseny.logisticscrm.services.OrderService;
-import com.roseny.logisticscrm.services.ProductService;
-import com.roseny.logisticscrm.services.TicketService;
+import com.roseny.logisticscrm.services.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +20,7 @@ public class AdminController {
     private final CategoryService categoryService;
     private final TicketService ticketService;
     private final OrderService orderService;
+    private final UserService userService;
 
     @PostMapping("/add/category")
     public ResponseEntity<?> addCategory(@Valid @RequestBody AddCategoryRequest categoryRequest) {
@@ -32,6 +30,16 @@ public class AdminController {
     @PostMapping("/add/product")
     public ResponseEntity<?> addProduct(@Valid @RequestBody AddProductRequest productRequest) {
         return productService.addProduct(productRequest);
+    }
+
+    @GetMapping("/users/{user_id}")
+    public ResponseEntity<?> getUser(@PathVariable(name = "user_id") Long userId) {
+        return userService.getInfoAboutUserById(userId);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @GetMapping("/product/{product_id}/delete")

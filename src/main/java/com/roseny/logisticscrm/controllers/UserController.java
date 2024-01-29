@@ -24,11 +24,6 @@ public class UserController {
         return userService.getInfoAboutUserById(userId);
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<?> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(Principal principal) {
         if (principal == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized"); }
