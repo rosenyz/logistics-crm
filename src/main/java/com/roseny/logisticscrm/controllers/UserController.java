@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     private final OrderService orderService;
 
-    @GetMapping("/users/{user_id}")
+    @GetMapping("/{user_id}")
     public ResponseEntity<?> getInfoAboutUser(@PathVariable(name = "user_id") Long userId) {
         return userService.getInfoAboutUserById(userId);
     }

@@ -25,7 +25,7 @@ public class Ticket {
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Order order;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "ticketUuid")
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private List<Message> messages;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)

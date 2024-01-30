@@ -136,6 +136,14 @@ public class TicketService {
         return ResponseEntity.ok(getInfoFromTicket(ticket));
     }
 
+    public Ticket getTicketByUUID(UUID ticketUUID) {
+        return ticketRepository.findById(ticketUUID).orElse(null);
+    }
+
+    public void save(Ticket ticket) {
+        ticketRepository.save(ticket);
+    }
+
     public InfoTicketResponse getInfoFromTicket(Ticket ticket) {
 
         return new InfoTicketResponse(

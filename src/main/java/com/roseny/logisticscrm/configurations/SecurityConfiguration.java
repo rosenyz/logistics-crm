@@ -48,7 +48,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/panel/**", "/api/v1/panel").hasRole("ADMIN")
                         .requestMatchers("/api/v1/users/**", "/api/v1/users").hasRole("SUPPORT")
-                        .requestMatchers("/api/v1/orders/**", "/api/v1/profile", "/api/v1/tickets/create").fullyAuthenticated()
+                        .requestMatchers("/api/v1/orders/**", "/api/v1/users/profile",
+                                "/api/v1/tickets/create", "api/v1/users/profile/orders", "api/v1/messages/**").fullyAuthenticated()
                         .anyRequest().permitAll());
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
