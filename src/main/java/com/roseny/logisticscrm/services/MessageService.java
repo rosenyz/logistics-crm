@@ -4,6 +4,7 @@ import com.roseny.logisticscrm.dtos.requests.MessageSendRequest;
 import com.roseny.logisticscrm.models.Message;
 import com.roseny.logisticscrm.models.Ticket;
 import com.roseny.logisticscrm.models.User;
+import com.roseny.logisticscrm.models.enums.StatusTicket;
 import com.roseny.logisticscrm.repositories.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,10 @@ public class MessageService {
 
         if (!(user.equals(ticket.getUser()) || user.equals(ticket.getStaffUser()))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+
+        if (ticket.getStatus() == StatusTicket.STATUS_CLOSED) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Писать в закрытое обращение нельзя. Создайте новое.");
         }
 
         Message message = new Message();

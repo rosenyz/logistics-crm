@@ -42,6 +42,12 @@ public class TicketService {
                         .status(HttpStatus.NOT_FOUND)
                         .body("Заказа под номером %d не существует.".formatted(createTicketRequest.getOrderId()));
             }
+
+            if (!user.getOrders().contains(order)) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("У Вас нет заказа под номером %d".formatted(createTicketRequest.getOrderId()));
+            }
             ticket.setOrder(order);
         }
 

@@ -64,15 +64,15 @@ public class AdminController {
         return ticketService.findTicketsByStatus(status);
     }
 
-    @GetMapping("/ticket/{ticket_uuid}")
+    @GetMapping("/tickets/{ticket_uuid}")
     public ResponseEntity<?> takeTicket(@RequestParam(name = "action", required = false) String action, @PathVariable(name = "ticket_uuid") UUID ticketUUID, Principal principal) {
-        if (action.equals("take"))
-            return ticketService.takeTicket(ticketUUID, principal);
-
-        if (action.equals("close")) {
-            return ticketService.closeTicket(ticketUUID, principal);
+        if (action == null) {
+            action = "";
         }
-
-        return ticketService.findTicketByUUID(ticketUUID, principal);
+        return switch (action) {
+            case "take" -> ticketService.takeTicket(ticketUUID, principal);
+            case "close" -> ticketService.closeTicket(ticketUUID, principal);
+            default -> ticketService.findTicketByUUID(ticketUUID, principal);
+        };
     }
 }
