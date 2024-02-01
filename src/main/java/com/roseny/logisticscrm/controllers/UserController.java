@@ -1,16 +1,15 @@
 package com.roseny.logisticscrm.controllers;
 
 import com.roseny.logisticscrm.services.OrderService;
+import com.roseny.logisticscrm.services.TicketService;
 import com.roseny.logisticscrm.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -18,6 +17,7 @@ import java.security.Principal;
 public class UserController {
     private final UserService userService;
     private final OrderService orderService;
+    private final TicketService ticketService;
 
     @GetMapping("/{user_id}")
     public ResponseEntity<?> getInfoAboutUser(@PathVariable(name = "user_id") Long userId) {
@@ -31,8 +31,15 @@ public class UserController {
     }
 
     @GetMapping("/profile/orders")
-    public ResponseEntity<?> getUserOrders(Principal principal) {
-        if (principal == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized"); }
+    public ResponseEntity<?> getOrders(Principal principal) {
         return orderService.getUserOrders(principal);
+    }
+
+    @GetMapping("/profile/tickets")
+    public ResponseEntity<?> getTickets(
+            @RequestParam(name = "ticket_uuid", required = false) UUID ticketUUID,
+            Principal principal) {
+        return (ticketUUID == null)
+                ? ticketService.findAllTickets(principal) : ticketService.findTicketByUUID(ticketUUID, principal);
     }
 }

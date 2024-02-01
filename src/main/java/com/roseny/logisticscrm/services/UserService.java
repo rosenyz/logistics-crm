@@ -61,7 +61,7 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<?> getInfoAboutUserById(Long userId) {
-        User user = userRepository.findById(userId).orElse( user = null );
+        User user = userRepository.findById(userId).orElse( null );
 
         if (user == null) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Такого пользователя не существует"); }
 

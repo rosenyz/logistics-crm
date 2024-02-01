@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -22,10 +21,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final ProductService productService;
-
-    public void save(Order order) {
-        orderRepository.save(order);
-    }
 
     public ResponseEntity<?> createOrder(CreateOrderRequest createOrderRequest, Principal principal) {
         if (principal == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Something went wrong..."); }
@@ -76,6 +71,8 @@ public class OrderService {
     }
 
     public ResponseEntity<?> getUserOrders(Principal principal) {
+        if (principal == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized"); }
+
         User user = userService.findUserByPrincipal(principal);
         List<Order> orders = orderRepository.findOrdersByCustomerId(user.getId());
 

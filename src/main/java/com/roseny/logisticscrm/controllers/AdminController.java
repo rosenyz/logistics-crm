@@ -5,8 +5,6 @@ import com.roseny.logisticscrm.dtos.requests.AddProductRequest;
 import com.roseny.logisticscrm.services.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +52,7 @@ public class AdminController {
         return orderService.getAllOrders();
     }
 
-    @GetMapping("/order/{order_id}")
+    @GetMapping("/orders/{order_id}")
     public ResponseEntity<?> getOrderById(@PathVariable(name = "order_id") Long orderId) {
         return orderService.getOrderById(orderId);
     }

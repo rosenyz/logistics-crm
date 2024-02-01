@@ -80,6 +80,25 @@ public class TicketService {
         return ResponseEntity.ok(infoTicketResponse);
     }
 
+    public ResponseEntity<?> findAllTickets(Principal principal) {
+        if (principal == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized"); }
+
+        User user = userService.findUserByPrincipal(principal);
+        List<Ticket> tickets = ticketRepository.findTicketsByUser(user);
+
+        if (tickets.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Обращений нет.");
+        }
+
+        List<InfoTicketResponse> ticketsInfo = new ArrayList<>();
+
+        for (Ticket ticket : tickets) {
+            ticketsInfo.add(getInfoFromTicket(ticket));
+        }
+
+        return ResponseEntity.ok(ticketsInfo);
+    }
+
     public ResponseEntity<?> findTicketsByStatus(String status) {
         List<Ticket> tickets;
 
