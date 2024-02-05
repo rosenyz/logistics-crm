@@ -47,14 +47,17 @@ public class AdminController {
         return productService.deleteProduct(productId);
     }
 
-    @GetMapping("/orders/all")
+    @GetMapping("/orders")
     public ResponseEntity<?> getAllOrders() {
         return orderService.getAllOrders();
     }
 
     @GetMapping("/orders/{order_id}")
-    public ResponseEntity<?> getOrderById(@PathVariable(name = "order_id") Long orderId) {
-        return orderService.getOrderById(orderId);
+    public ResponseEntity<?> getOrderById(@RequestParam(name = "action", required = false) Integer action, @PathVariable(name = "order_id") Long orderId, Principal principal) {
+        if (action <= 6 && action > 0) {
+            return orderService.changeOrderStatus(action, orderId, principal);
+        }
+        return orderService.getOrderById(orderId, principal);
     }
 
     @GetMapping("/tickets")

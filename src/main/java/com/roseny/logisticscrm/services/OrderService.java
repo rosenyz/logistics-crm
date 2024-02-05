@@ -4,6 +4,8 @@ import com.roseny.logisticscrm.dtos.requests.CreateOrderRequest;
 import com.roseny.logisticscrm.models.Order;
 import com.roseny.logisticscrm.models.Product;
 import com.roseny.logisticscrm.models.User;
+import com.roseny.logisticscrm.models.enums.Role;
+import com.roseny.logisticscrm.models.enums.StatusOrder;
 import com.roseny.logisticscrm.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -89,10 +93,43 @@ public class OrderService {
         return ResponseEntity.ok(orders);
     }
 
-    public ResponseEntity<?> getOrderById(Long orderId) {
+    public ResponseEntity<?> getOrderById(Long orderId, Principal principal) {
+        if (principal == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized"); }
+
         Order order = orderRepository.findById(orderId).orElse(null);
+        User user = userService.findUserByPrincipal(principal);
 
         if (order == null) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Такого заказа не существует."); }
+
+        if (!(order.getCustomerId().equals(user.getId())
+                || user.getRoles().contains(Role.ROLE_SUPPORT)
+                || user.getRoles().contains(Role.ROLE_ADMIN))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Нет доступа!");
+        }
+
+        return ResponseEntity.ok(order);
+    }
+
+    public ResponseEntity<?> changeOrderStatus(Integer action, Long orderId, Principal principal) {
+        if (principal == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized"); }
+
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order == null) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Такого заказа не существует!"); }
+
+        Map<Integer, StatusOrder> actions = new HashMap<>();
+        actions.put(1, StatusOrder.STATUS_ROUTE_TO_STOCK);
+        actions.put(2, StatusOrder.STATUS_WAITING_TO_PAY);
+        actions.put(3, StatusOrder.STATUS_PAID);
+        actions.put(4, StatusOrder.STATUS_ROUTE_TO_STOCK_IN_COUNTRY);
+        actions.put(5, StatusOrder.STATUS_ROUTE_TO_DPOINT);
+        actions.put(6, StatusOrder.STATUS_DONE);
+
+        if (order.getStatus() == actions.get(action)) {
+            return ResponseEntity.ok(order);
+        }
+
+        order.setStatus(actions.get(action));
+        orderRepository.save(order);
 
         return ResponseEntity.ok(order);
     }

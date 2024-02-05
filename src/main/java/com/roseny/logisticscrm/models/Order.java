@@ -30,7 +30,7 @@ public class Order {
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private List<Product> products; // may be null, cause customer can order something thats not in catalog ( place url in commentary, for example )
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private StatusOrder status;
 
     @Column(name = "products_price")

@@ -19,4 +19,9 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest, Principal principal) {
         return orderService.createOrder(createOrderRequest, principal);
     }
+
+    @GetMapping("/{order_id}")
+    public ResponseEntity<?> getOrder(@PathVariable(name = "order_id") Long orderId, Principal principal) {
+        return orderService.getOrderById(orderId, principal);
+    }
 }
